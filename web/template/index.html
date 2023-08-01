@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Universal JSON Beautifier</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-5">
+    <h1 class="text-center mb-5">Universal JSON Beautifier</h1>
+
+    <textarea id="jsonInput" class="form-control mb-3" rows="6" placeholder="Place JSON here"></textarea>
+
+    <div class="d-flex justify-content-start mb-3">
+        <div class="form-check mr-3">
+            <input type="checkbox" class="form-check-input" id="minifyJson">
+            <label class="form-check-label" for="minifyJson">Minify</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="unescapeJson">
+            <label class="form-check-label" for="unescapeJson">Unescape</label>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mb-3">
+        <button class="btn btn-primary" style="width: 300px; font-size: 150%;" id="beautifyButton">Beautify</button>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>Result:</h3>
+        <button class="btn btn-secondary" id="copyButton">Copy</button>
+    </div>
+
+    <div id="jsonOutput" class="border p-3 rounded">
+        <pre id="outputText"></pre>
+    </div>
+
+    <footer class="text-center mt-5">
+        <p> 2023 Universal JSON Beautifier</p>
+        <p>Contact: <a href="mailto:aburavov189@gmail.com">aburavov189@gmail.com</a></p>
+    </footer>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('beautifyButton').addEventListener('click', function() {
+            let input = document.getElementById('jsonInput').value;
+
+            if (input.length === 0) {
+                return;
+            }
+
+            if (document.getElementById('unescapeJson').checked) {
+                console.log("unescaping");
+                input = input.replace(/\\"/g, '"');
+            }
+
+            console.log('beautifying', input);
+
+            try {
+                let json = JSON.parse(input);
+                let output = document.getElementById('minifyJson').checked ? JSON.stringify(json) : JSON.stringify(json, null, 4);
+                document.querySelector('#jsonOutput pre').textContent = output;
+                document.querySelector('#jsonOutput pre').style.color = 'black';
+            } catch (e) {
+                document.querySelector('#jsonOutput pre').textContent = 'JSON is invalid';
+                document.querySelector('#jsonOutput pre').style.color = 'red';
+                console.log(e);
+            }
+        });
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            let copyText = document.querySelector('#jsonOutput pre').textContent;
+            navigator.clipboard.writeText(copyText).then(function() {
+                console.log('Copying to clipboard was successful!');
+            }).catch(function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        });
+    });
+</script>
+</body>
+</html>
