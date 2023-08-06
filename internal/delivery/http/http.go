@@ -58,6 +58,8 @@ func (h *Handler) Run() error {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
+	router.POST("/api/analytics/event", h.AnalyticsEvent)
+
 	return router.Run(fmt.Sprintf(":%d", h.Config.Port))
 }
 

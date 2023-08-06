@@ -63,11 +63,29 @@
                 let output = document.getElementById('minifyJson').checked ? JSON.stringify(json) : JSON.stringify(json, null, 4);
                 document.querySelector('#jsonOutput pre').textContent = output;
                 document.querySelector('#jsonOutput pre').style.color = 'black';
+                console.log('beautified successfully')
             } catch (e) {
                 document.querySelector('#jsonOutput pre').textContent = 'JSON is invalid';
                 document.querySelector('#jsonOutput pre').style.color = 'red';
                 console.log(e);
             }
+
+            fetch('/api/analytics/event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ eventName: 'calculated' })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('network request failed');
+                    }
+                    return true;
+                })
+                .catch(error => {
+                    console.error('analytics error:', error);
+                });
         });
 
         document.getElementById('copyButton').addEventListener('click', function() {
