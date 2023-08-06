@@ -1,6 +1,3 @@
-include .env
-export
-
 lint:
 	golangci-lint run --timeout=5m
 
@@ -16,11 +13,8 @@ run-docker:
 	docker rm jsonbeautifier || true
 	docker run -d -p 8080:8080 --name jsonbeautifier jsonbeautifier:latest
 
-deploy-ci:
+deploy:
 	rm deploy.tar || true
 	tar -cvf ./deploy.tar  ./*
-	caprover deploy -t ./deploy.tar --host https://captain.app.tinygreencat.dev --appToken ${CAPROVER_TOKEN} --appName jsonbeautifier
+	caprover deploy -t ./deploy.tar --host https://captain.app.tinygreencat.dev --caproverPassword ${CAPROVER_PASSWORD} --appName jsonbeautifier
 	rm deploy.tar
-
-deploy:
-	caprover deploy
