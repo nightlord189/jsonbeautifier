@@ -50,22 +50,11 @@ func (h *Handler) Run() error {
 		c.AbortWithStatus(204)
 	})
 
-	router.GET("/api/health", h.Health)
-
 	router.LoadHTMLFiles("web/template/index.html")
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
-	router.POST("/api/analytics/event", h.AnalyticsEvent)
-
 	return router.Run(fmt.Sprintf(":%d", h.Config.Port))
-}
-
-func (h *Handler) Health(c *gin.Context) {
-	c.JSON(http.StatusOK, HealthResponse{
-		Status:    "success",
-		Timestamp: time.Now(),
-	})
 }
